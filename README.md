@@ -2,7 +2,7 @@
 
 ## Progress
 
-| Day | Puuzel 1 | Puzzle 2 |
+| Day | Puzzle 1 | Puzzle 2 |
 |:---:|:--------:|:--------:|
 |  1  | Done     | Done     |
 |  2  |          |          |
