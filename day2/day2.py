@@ -11,16 +11,70 @@ def read_input_one():
 
     return report_list
 
+def unsafe_checker(first_level, second_level):
+    abs_diff = abs(first_level - second_level)
+
+    return first_level >= second_level or abs_diff > 3 or abs_diff == 0
+
 def puzzle_one():
     reports = read_input_one()
     safe_reports = 0
 
     for r in reports:
-        for level in r:
-            pass    
+        if r[0] > r[len(r)-1]:
+            r = r[::-1]
+
+        safe = True
+
+        for l in range(1,len(r)):
+            if unsafe_checker(r[l-1], r[l]):
+                safe = False
+                break
+
+        if safe:
+            safe_reports += 1
+
+    return safe_reports
+
+def puzzle_two():
+    reports = read_input_one()
+    safe_reports = 0
+
+    for r in reports:
+        if r[0] > r[len(r)-1]:
+            r = r[::-1]
+
+        bad_levels = 0
+        bad_index = -1
+
+        for l in range(1,len(r)):
+            if unsafe_checker(r[l-1], r[l]):
+                bad_levels += 1
+                if bad_levels > 1:
+                    break
+
+                bad_index = l
+        
+        if bad_levels == 0:
+            safe_reports += 1
+        elif bad_levels == 1:
+            r.pop(bad_index)
+            safe = True
+
+            for l in range(1,len(r)):
+                if unsafe_checker(r[l-1], r[l]):
+                    safe = False
+                    break
+
+            if safe:
+                safe_reports += 1
+
+    return safe_reports
+
 
 def main():
-    puzzle_one()
+    print(f"First puzzle: {puzzle_one()}")
+    print(f"Second puzzle: {puzzle_two()}")
 
 if __name__ == '__main__':
     main()
