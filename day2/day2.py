@@ -18,7 +18,8 @@ def unsafe_checker(first_level, second_level):
 
 def puzzle_one():
     reports = read_input_one()
-    safe_reports = 0
+    unsafe_reports = []
+    number_safe_reports = 0
 
     for r in reports:
         if r[0] > r[len(r)-1]:
@@ -28,52 +29,44 @@ def puzzle_one():
 
         for l in range(1,len(r)):
             if unsafe_checker(r[l-1], r[l]):
+                unsafe_reports.append(r)
                 safe = False
                 break
 
         if safe:
-            safe_reports += 1
+            number_safe_reports += 1
 
-    return safe_reports
+    return (number_safe_reports, unsafe_reports)
 
 def puzzle_two():
-    reports = read_input_one()
-    safe_reports = 0
+    number_safe_reports, unsafe_reports = puzzle_one()
 
-    for r in reports:
+    for r in unsafe_reports:
         if r[0] > r[len(r)-1]:
             r = r[::-1]
 
-        bad_levels = 0
-        bad_index = -1
+        any_safe = False
 
-        for l in range(1,len(r)):
-            if unsafe_checker(r[l-1], r[l]):
-                bad_levels += 1
-                if bad_levels > 1:
-                    break
-
-                bad_index = l
-        
-        if bad_levels == 0:
-            safe_reports += 1
-        elif bad_levels == 1:
-            r.pop(bad_index)
+        for i in range(len(r)):
+            modded_r = r.copy()
+            modded_r.pop(i)
             safe = True
 
-            for l in range(1,len(r)):
-                if unsafe_checker(r[l-1], r[l]):
+            for l in range(1,len(modded_r)):
+                if unsafe_checker(modded_r[l-1], modded_r[l]):
                     safe = False
                     break
 
             if safe:
-                safe_reports += 1
+                any_safe = True
 
-    return safe_reports
+        if any_safe:
+            number_safe_reports += 1
 
+    return number_safe_reports
 
 def main():
-    print(f"First puzzle: {puzzle_one()}")
+    print(f"First puzzle: {puzzle_one()[0]}")
     print(f"Second puzzle: {puzzle_two()}")
 
 if __name__ == '__main__':
