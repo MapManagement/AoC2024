@@ -1,4 +1,4 @@
-def read_input_one():
+def read_input():
     with open("input", "r") as input:
         return [list(line.strip()) for line in input]
 
@@ -47,7 +47,7 @@ def find_diagonally(input):
     return sum
 
 def first_puzzle():
-    input = read_input_one()
+    input = read_input()
 
     sum = 0
     sum += find_horizontally(input.copy())
@@ -55,9 +55,28 @@ def first_puzzle():
     sum += find_diagonally(input.copy())
     return sum
 
+def second_puzzle():
+    input = read_input()
+    sum = 0
+
+    for i in range(1, len(input)-1):
+        for j in range(1, len(input[i])-1):
+            if input[i][j] != 'A':
+                continue;
+
+            tl_br = input[i-1][j-1] == 'M' and input[i+1][j+1] == 'S'
+            bl_tr = input[i+1][j-1] == 'M' and input[i-1][j+1] == 'S'
+            r_tl_br = input[i-1][j-1] == 'S' and input[i+1][j+1] == 'M'
+            r_bl_tr = input[i+1][j-1] == 'S' and input[i-1][j+1] == 'M'
+
+            if (tl_br or r_tl_br) and (bl_tr or r_bl_tr):
+                sum += 1
+
+    return sum
+
 def main():
     print(f"First puzzle: {first_puzzle()}")
-    #print(f"Second puzzle: {puzzle_two()}")
+    print(f"Second puzzle: {second_puzzle()}")
 
 if __name__ == '__main__':
     main()
