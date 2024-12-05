@@ -24,19 +24,26 @@ def read_input():
 
     return (ordering_rule_list, update_list)
 
-def first_puzzle():
-    input = read_input()
+def check_updates(input):
     correct_updates = []
+    wrong_updates = []
     
     for update in input[1]:
         correct = True
         for i in range(1, len(update)):
             if update[i-1] not in input[0].keys() or update[i] not in input[0][update[i-1]]:
                 correct = False
+                wrong_updates.append(update)
                 break
 
         if correct:
             correct_updates.append(update)
+
+    return (correct_updates, wrong_updates)
+
+def first_puzzle():
+    input = read_input()
+    (correct_updates, wrong_updates) = check_updates(input)
 
     sum = 0
     for correct_update in correct_updates:
@@ -44,8 +51,23 @@ def first_puzzle():
 
     return sum
 
+
 def second_puzzle():
-    pass
+    input = read_input()
+    (correct_updates, wrong_updates) = check_updates(input)
+    
+    for update in wrong_updates:
+        for i in range(1, len(update)):
+            if update[i-1] not in input[0].keys() or update[i] not in input[0][update[i-1]]:
+                update[i-1], update[1] = update[1], update[i-1]
+
+    print(wrong_updates)
+
+    sum = 0
+    for update in wrong_updates:
+        sum += update[len(update)//2]
+
+    return sum
 
 def main():
     print(f"First puzzle: {first_puzzle()}")
