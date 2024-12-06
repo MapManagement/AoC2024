@@ -8,7 +8,7 @@
 |  2  | Done     | Done     |
 |  3  | Done     | Done     |
 |  4  | Done     | Done     |
-|  5  | Done     |          |
+|  5  | Done     | Done     |
 |  6  |          |          |
 |  7  |          |          |
 |  8  |          |          |

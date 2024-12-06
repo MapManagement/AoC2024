@@ -51,15 +51,16 @@ def first_puzzle():
 
     return sum
 
-
 def second_puzzle():
     input = read_input()
     (correct_updates, wrong_updates) = check_updates(input)
+    print(input[0])
     
     for update in wrong_updates:
-        for i in range(1, len(update)):
-            if update[i-1] not in input[0].keys() or update[i] not in input[0][update[i-1]]:
-                update[i-1], update[1] = update[1], update[i-1]
+        for i in range(len(update)):
+            for j in range(len(update)-i-1):
+                if update[j+1] in input[0].keys() and update[j] in input[0][update[j+1]]:
+                    update[j], update[j+1] = update[j+1], update[j]
 
     print(wrong_updates)
 
