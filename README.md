@@ -9,7 +9,7 @@
 |  3  | Done     | Done     |
 |  4  | Done     | Done     |
 |  5  | Done     | Done     |
-|  6  |          |          |
+|  6  | Done     |          |
 |  7  |          |          |
 |  8  |          |          |
 |  9  |          |          |
