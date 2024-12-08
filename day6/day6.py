@@ -1,4 +1,4 @@
-guard_markers = ["^", "v", "<", ">"]
+guard_markers = ["^", ">", "v", "<"]
 
 def read_input():
     lines = []
@@ -25,63 +25,49 @@ def count_xes(grid):
 
     return count
 
+def get_next_direction(current_direction):
+    index = guard_markers.index(current_direction)
+    return guard_markers[(index + 1)%len(guard_markers)]
+
+def is_out_of_field(grid_size, next_guard_row, next_guard_col):
+    rows = grid_size[0]
+    cols = grid_size[1]
+
+    return next_guard_row < 0 or next_guard_col < 0 or next_guard_row >= rows or next_guard_col >= cols
+
 def first_puzzle():
     grid = read_input()
     grid_size = (len(grid), len(grid[0]))
     guard = find_start_of_guard(grid)
 
     while True:
+        guard_row = guard[0][0]
+        guard_col = guard[0][1]
+        guard_direction = guard[1]
+        next_direction = get_next_direction(guard_direction)
+
+        next_guard_row = guard_row
+        next_guard_col = guard_col
+
         if guard[1] == "^":
-            new_row = guard[0][0] - 1
-            if new_row < 0:
-                grid[guard[0][0]][guard[0][1]] = "X"
-                break
-
-            if grid[new_row][guard[0][1]] == "#":
-                guard[1] = ">"
-            else:
-                grid[guard[0][0]][guard[0][1]] = "X"
-                grid[new_row][guard[0][1]] = "^"
-                guard[0] = [new_row, guard[0][1]]
-
+            next_guard_row = guard_row - 1
         elif guard[1] == "v":
-            new_row = guard[0][0] + 1
-            if new_row >= grid_size[0]:
-                grid[guard[0][0]][guard[0][1]] = "X"
-                break
-
-            if grid[new_row][guard[0][1]] == "#":
-                guard[1] = "<"
-            else:
-                grid[guard[0][0]][guard[0][1]] = "X"
-                grid[new_row][guard[0][1]] = "v"
-                guard[0] = [new_row, guard[0][1]]
-
+            next_guard_row = guard_row + 1
         elif guard[1] == "<":
-            new_col = guard[0][1] - 1
-            if new_col < 0:
-                grid[guard[0][0]][guard[0][1]] = "X"
-                break
-
-            if grid[guard[0][0]][new_col] == "#":
-                guard[1] = "^"
-            else:
-                grid[guard[0][0]][guard[0][1]] = "X"
-                grid[guard[0][0]][new_col] = "<"
-                guard[0] = [guard[0][0], new_col]
-
+            next_guard_col = guard_col - 1
         elif guard[1] == ">":
-            new_col = guard[0][1] + 1
-            if new_col >= grid_size[1]:
-                grid[guard[0][0]][guard[0][1]] = "X"
-                break
+            next_guard_col = guard_col + 1
 
-            if grid[guard[0][0]][new_col] == "#":
-                guard[1] = "v"
-            else:
-                grid[guard[0][0]][guard[0][1]] = "X"
-                grid[guard[0][0]][new_col] = ">"
-                guard[0] = [guard[0][0], new_col]
+        if is_out_of_field(grid_size, next_guard_row, next_guard_col):
+            grid[guard_row][guard_col] = "X"
+            break
+
+        if grid[next_guard_row][next_guard_col] == "#":
+            guard[1] = next_direction
+        else:
+            grid[guard_row][guard_col] = "X"
+            grid[next_guard_row][next_guard_col] = next_direction
+            guard[0] = [next_guard_row, next_guard_col]
 
     return count_xes(grid)
     
