@@ -1,4 +1,4 @@
-guard_markers = ["^", ">", "v", "<"]
+guard_markers = {"^": (-1,0), ">":(0,1), "v":(1,0), "<":(0,-1)}
 
 def read_input():
     lines = []
@@ -26,8 +26,14 @@ def count_xes(grid):
     return count
 
 def get_next_direction(current_direction):
-    index = guard_markers.index(current_direction)
-    return guard_markers[(index + 1)%len(guard_markers)]
+    if current_direction == "^":
+        return ">"
+    elif current_direction == ">":
+        return "v"
+    elif current_direction == "v":
+        return "<"
+    elif current_direction == "<":
+        return "^"
 
 def is_out_of_field(grid_size, next_guard_row, next_guard_col):
     rows = grid_size[0]
@@ -49,14 +55,9 @@ def first_puzzle():
         next_guard_row = guard_row
         next_guard_col = guard_col
 
-        if guard[1] == "^":
-            next_guard_row = guard_row - 1
-        elif guard[1] == "v":
-            next_guard_row = guard_row + 1
-        elif guard[1] == "<":
-            next_guard_col = guard_col - 1
-        elif guard[1] == ">":
-            next_guard_col = guard_col + 1
+        guard_update = guard_markers[guard_direction]
+        next_guard_row += guard_markers[guard_direction][0]
+        next_guard_col += guard_markers[guard_direction][1]
 
         if is_out_of_field(grid_size, next_guard_row, next_guard_col):
             grid[guard_row][guard_col] = "X"
